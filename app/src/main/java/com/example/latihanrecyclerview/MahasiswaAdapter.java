@@ -12,7 +12,7 @@ import java.util.List;
 
 public class MahasiswaAdapter extends RecyclerView.Adapter<MahasiswaAdapter.MahasiswaViewHolder> {
     private final Context context;
-    private final List<Mahasiswa> mahasiswaList;
+    private static List<Mahasiswa> mahasiswaList;
 
     public MahasiswaAdapter(Context context, List<Mahasiswa> mahasiswaList) {
         this.context = context;
@@ -39,7 +39,7 @@ public class MahasiswaAdapter extends RecyclerView.Adapter<MahasiswaAdapter.Maha
         return mahasiswaList.size();
     }
 
-    public static class MahasiswaViewHolder extends RecyclerView.ViewHolder {
+    public static class MahasiswaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView textViewNama;
         TextView textViewNIM;
         ImageView imageViewMahasiswa;
@@ -49,6 +49,28 @@ public class MahasiswaAdapter extends RecyclerView.Adapter<MahasiswaAdapter.Maha
             textViewNama = itemView.findViewById(R.id.textViewNama);
             textViewNIM = itemView.findViewById(R.id.textViewNIM);
             imageViewMahasiswa = itemView.findViewById(R.id.imageViewMahasiswa);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            if (onMahasiswaClickListener != null) {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    Mahasiswa mahasiswa = mahasiswaList.get(position);
+                    onMahasiswaClickListener.onMahasiswaClick(mahasiswa);
+                }
+            }
+        }
+    }
+
+    public interface OnMahasiswaClickListener {
+        void onMahasiswaClick(Mahasiswa mahasiswa);
+    }
+
+    private static OnMahasiswaClickListener onMahasiswaClickListener;
+
+    public void setOnMahasiswaClickListener(OnMahasiswaClickListener onMahasiswaClickListener) {
+        this.onMahasiswaClickListener = onMahasiswaClickListener;
     }
 }

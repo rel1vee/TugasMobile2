@@ -1,5 +1,6 @@
 package com.example.latihanrecyclerview;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MahasiswaAdapter.OnMahasiswaClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +20,19 @@ public class MainActivity extends AppCompatActivity {
 
         List<Mahasiswa> mahasiswaList = generateMahasiswaList(); // Fungsi untuk menghasilkan daftar mahasiswa
         MahasiswaAdapter adapter = new MahasiswaAdapter(this, mahasiswaList);
+        adapter.setOnMahasiswaClickListener(this); // Set listener
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onMahasiswaClick(Mahasiswa mahasiswa) {
+        // Kode untuk memunculkan halaman baru di sini
+        // Misalnya, Anda dapat membuka sebuah aktivitas baru dengan detail informasi mahasiswa
+        Intent intent = new Intent(this, DetailMahasiswaActivity.class);
+        intent.putExtra("nama", mahasiswa.getNama());
+        intent.putExtra("nim", mahasiswa.getNim());
+        intent.putExtra("foto", mahasiswa.getFoto());
+        startActivity(intent);
     }
 
     // Fungsi untuk menghasilkan daftar mahasiswa
